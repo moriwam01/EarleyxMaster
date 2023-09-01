@@ -1,0 +1,51 @@
+<project name="earleyx" default="compile" basedir=".">
+    <description>
+        simple example build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="bin" location="classes"/>
+  <property name="dist"  location="."/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${bin}"/>
+  </target>
+
+  <!-- Thang added classpaths -->
+  <path id="compile.classpath">
+    <pathelement location="classes"/>
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${bin} -->
+    <javac srcdir="${src}" destdir="${bin}" debug="true" includeantruntime="false">
+      <!-- Thang added classpaths -->
+      <classpath refid="compile.classpath"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${bin} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/earleyx.jar" basedir="${bin}">
+      <fileset dir="${bin}"/>
+      <fileset dir="${src}" includes="**/*.java"/>
+    </jar>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${bin} and ${dist} directory trees -->
+    <delete dir="${bin}"/>
+  </target>
+</project>
